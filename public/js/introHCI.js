@@ -14,6 +14,28 @@ function initializePage() {
 	$('#colorBtn').click(randomizeColors);
 }
 
+
+function callBack(result) {
+	console.log(result);
+	var selector = 'div#project' + result.id + '.project';
+
+	console.log(selector);
+	console.log($(selector).children('.thumbnail').children('.details').html());
+	var img = "<img src='" + result.image + "' class='detailsImage'>"
+	$(selector).children('.thumbnail').children('.details').html(img + result.summary);
+}
+
+function color(result) {
+	console.log(result);
+	var colors = result.colors.hex;
+	console.log(colors);
+
+	$('body').css('background-color', colors[0]);
+	$('.thumbnail').css('background-color', colors[1]);
+	$('h1, h2, h3, h4, h5, h5').css('color', colors[2]);
+	$('p').css('color', colors[3]);
+	$('.project img').css('opacity', .75);
+}
 /*
  * Make an AJAX call to retrieve project details and add it in
  */
@@ -27,6 +49,7 @@ function addProjectDetails(e) {
 	var idNumber = projectID.substr('project'.length);
 
 	console.log("User clicked on project " + idNumber);
+	console.log($.get("/project/" + idNumber, callBack));
 }
 
 /*
@@ -35,4 +58,5 @@ function addProjectDetails(e) {
  */
 function randomizeColors(e) {
 	console.log("User clicked on color button");
+	$.get("/palette/", color);
 }
